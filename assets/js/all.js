@@ -14235,68 +14235,6 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clearBodyAndDocument = exports.jQueryMock = exports.createEvent = exports.clearFixture = exports.getFixture = void 0;
-var fixtureId = 'fixture';
-
-var getFixture = function getFixture() {
-  var fixtureEl = document.getElementById(fixtureId);
-
-  if (!fixtureEl) {
-    fixtureEl = document.createElement('div');
-    fixtureEl.setAttribute('id', fixtureId);
-    fixtureEl.style.position = 'absolute';
-    fixtureEl.style.top = '-10000px';
-    fixtureEl.style.left = '-10000px';
-    fixtureEl.style.width = '10000px';
-    fixtureEl.style.height = '10000px';
-    document.body.append(fixtureEl);
-  }
-
-  return fixtureEl;
-};
-
-exports.getFixture = getFixture;
-
-var clearFixture = function clearFixture() {
-  var fixtureEl = getFixture();
-  fixtureEl.innerHTML = '';
-};
-
-exports.clearFixture = clearFixture;
-
-var createEvent = function createEvent(eventName) {
-  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var event = document.createEvent('Event');
-  event.initEvent(eventName, Boolean(params.bubbles), Boolean(params.cancelable));
-  return event;
-};
-
-exports.createEvent = createEvent;
-var jQueryMock = {
-  elements: undefined,
-  fn: {},
-  each: function each(fn) {
-    this.elements.forEach(function (el) {
-      fn.call(el);
-    });
-  }
-};
-exports.jQueryMock = jQueryMock;
-
-var clearBodyAndDocument = function clearBodyAndDocument() {
-  var attributes = ['data-bs-padding-right', 'style'];
-  attributes.forEach(function (attr) {
-    document.documentElement.removeAttribute(attr);
-    document.body.removeAttribute(attr);
-  });
-};
-
-exports.clearBodyAndDocument = clearBodyAndDocument;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports["default"] = void 0;
 
 var _eventHandler = _interopRequireDefault(require("../dom/event-handler"));
@@ -22990,837 +22928,66 @@ describe('Tooltip', function () {
 });
 "use strict";
 
-var _data = _interopRequireDefault(require("../../../src/dom/data"));
-
-var _fixture = require("../../helpers/fixture");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-describe('Data', function () {
-  var TEST_KEY = 'bs.test';
-  var UNKNOWN_KEY = 'bs.unknown';
-  var TEST_DATA = {
-    test: 'bsData'
-  };
-  var fixtureEl;
-  var div;
-  beforeAll(function () {
-    fixtureEl = (0, _fixture.getFixture)();
-  });
-  beforeEach(function () {
-    fixtureEl.innerHTML = '<div></div>';
-    div = fixtureEl.querySelector('div');
-  });
-  afterEach(function () {
-    _data["default"].remove(div, TEST_KEY);
-
-    (0, _fixture.clearFixture)();
-  });
-  it('should return null for unknown elements', function () {
-    var data = _objectSpread({}, TEST_DATA);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    expect(_data["default"].get(null)).toBeNull();
-    expect(_data["default"].get(undefined)).toBeNull();
-    expect(_data["default"].get(document.createElement('div'), TEST_KEY)).toBeNull();
-  });
-  it('should return null for unknown keys', function () {
-    var data = _objectSpread({}, TEST_DATA);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    expect(_data["default"].get(div, null)).toBeNull();
-    expect(_data["default"].get(div, undefined)).toBeNull();
-    expect(_data["default"].get(div, UNKNOWN_KEY)).toBeNull();
-  });
-  it('should store data for an element with a given key and return it', function () {
-    var data = _objectSpread({}, TEST_DATA);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    expect(_data["default"].get(div, TEST_KEY)).toBe(data);
-  });
-  it('should overwrite data if something is already stored', function () {
-    var data = _objectSpread({}, TEST_DATA);
-
-    var copy = _objectSpread({}, data);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    _data["default"].set(div, TEST_KEY, copy);
-
-    expect(_data["default"].get(div, TEST_KEY)).not.toBe(data);
-    expect(_data["default"].get(div, TEST_KEY)).toBe(copy);
-  });
-  it('should do nothing when an element have nothing stored', function () {
-    _data["default"].remove(div, TEST_KEY);
-
-    expect().nothing();
-  });
-  it('should remove nothing for an unknown key', function () {
-    var data = _objectSpread({}, TEST_DATA);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    _data["default"].remove(div, UNKNOWN_KEY);
-
-    expect(_data["default"].get(div, TEST_KEY)).toBe(data);
-  });
-  it('should remove data for a given key', function () {
-    var data = _objectSpread({}, TEST_DATA);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    _data["default"].remove(div, TEST_KEY);
-
-    expect(_data["default"].get(div, TEST_KEY)).toBeNull();
-  });
-  it('should console.error a message if called with multiple keys', function () {
-    /* eslint-disable no-console */
-    console.error = jasmine.createSpy('console.error');
-
-    var data = _objectSpread({}, TEST_DATA);
-
-    var copy = _objectSpread({}, data);
-
-    _data["default"].set(div, TEST_KEY, data);
-
-    _data["default"].set(div, UNKNOWN_KEY, copy);
-
-    expect(console.error).toHaveBeenCalled();
-    expect(_data["default"].get(div, UNKNOWN_KEY)).toBe(null);
-  });
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-"use strict";
+exports.clearBodyAndDocument = exports.jQueryMock = exports.createEvent = exports.clearFixture = exports.getFixture = void 0;
+var fixtureId = 'fixture';
 
-var _eventHandler = _interopRequireDefault(require("../../../src/dom/event-handler"));
+var getFixture = function getFixture() {
+  var fixtureEl = document.getElementById(fixtureId);
 
-var _fixture = require("../../helpers/fixture");
+  if (!fixtureEl) {
+    fixtureEl = document.createElement('div');
+    fixtureEl.setAttribute('id', fixtureId);
+    fixtureEl.style.position = 'absolute';
+    fixtureEl.style.top = '-10000px';
+    fixtureEl.style.left = '-10000px';
+    fixtureEl.style.width = '10000px';
+    fixtureEl.style.height = '10000px';
+    document.body.append(fixtureEl);
+  }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+  return fixtureEl;
+};
 
-/** Test helpers */
-describe('EventHandler', function () {
-  var fixtureEl;
-  beforeAll(function () {
-    fixtureEl = (0, _fixture.getFixture)();
+exports.getFixture = getFixture;
+
+var clearFixture = function clearFixture() {
+  var fixtureEl = getFixture();
+  fixtureEl.innerHTML = '';
+};
+
+exports.clearFixture = clearFixture;
+
+var createEvent = function createEvent(eventName) {
+  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var event = document.createEvent('Event');
+  event.initEvent(eventName, Boolean(params.bubbles), Boolean(params.cancelable));
+  return event;
+};
+
+exports.createEvent = createEvent;
+var jQueryMock = {
+  elements: undefined,
+  fn: {},
+  each: function each(fn) {
+    this.elements.forEach(function (el) {
+      fn.call(el);
+    });
+  }
+};
+exports.jQueryMock = jQueryMock;
+
+var clearBodyAndDocument = function clearBodyAndDocument() {
+  var attributes = ['data-bs-padding-right', 'style'];
+  attributes.forEach(function (attr) {
+    document.documentElement.removeAttribute(attr);
+    document.body.removeAttribute(attr);
   });
-  afterEach(function () {
-    (0, _fixture.clearFixture)();
-  });
-  describe('on', function () {
-    it('should not add event listener if the event is not a string', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
+};
 
-      _eventHandler["default"].on(div, null, function () {});
-
-      _eventHandler["default"].on(null, 'click', function () {});
-
-      expect().nothing();
-    });
-    it('should add event listener', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _eventHandler["default"].on(div, 'click', function () {
-        expect().nothing();
-        done();
-      });
-
-      div.click();
-    });
-    it('should add namespaced event listener', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _eventHandler["default"].on(div, 'bs.namespace', function () {
-        expect().nothing();
-        done();
-      });
-
-      _eventHandler["default"].trigger(div, 'bs.namespace');
-    });
-    it('should add native namespaced event listener', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _eventHandler["default"].on(div, 'click.namespace', function () {
-        expect().nothing();
-        done();
-      });
-
-      _eventHandler["default"].trigger(div, 'click');
-    });
-    it('should handle event delegation', function (done) {
-      _eventHandler["default"].on(document, 'click', '.test', function () {
-        expect().nothing();
-        done();
-      });
-
-      fixtureEl.innerHTML = '<div class="test"></div>';
-      var div = fixtureEl.querySelector('div');
-      div.click();
-    });
-    it('should handle mouseenter/mouseleave like the native counterpart', function (done) {
-      fixtureEl.innerHTML = ['<div class="outer">', '<div class="inner">', '<div class="nested">', '<div class="deep"></div>', '</div>', '</div>', '<div class="sibling"></div>', '</div>'];
-      var outer = fixtureEl.querySelector('.outer');
-      var inner = fixtureEl.querySelector('.inner');
-      var nested = fixtureEl.querySelector('.nested');
-      var deep = fixtureEl.querySelector('.deep');
-      var sibling = fixtureEl.querySelector('.sibling');
-      var enterSpy = jasmine.createSpy('mouseenter');
-      var leaveSpy = jasmine.createSpy('mouseleave');
-      var delegateEnterSpy = jasmine.createSpy('mouseenter');
-      var delegateLeaveSpy = jasmine.createSpy('mouseleave');
-
-      _eventHandler["default"].on(inner, 'mouseenter', enterSpy);
-
-      _eventHandler["default"].on(inner, 'mouseleave', leaveSpy);
-
-      _eventHandler["default"].on(outer, 'mouseenter', '.inner', delegateEnterSpy);
-
-      _eventHandler["default"].on(outer, 'mouseleave', '.inner', delegateLeaveSpy);
-
-      _eventHandler["default"].on(sibling, 'mouseenter', function () {
-        expect(enterSpy.calls.count()).toBe(2);
-        expect(leaveSpy.calls.count()).toBe(2);
-        expect(delegateEnterSpy.calls.count()).toBe(2);
-        expect(delegateLeaveSpy.calls.count()).toBe(2);
-        done();
-      });
-
-      var moveMouse = function moveMouse(from, to) {
-        from.dispatchEvent(new MouseEvent('mouseout', {
-          bubbles: true,
-          relatedTarget: to
-        }));
-        to.dispatchEvent(new MouseEvent('mouseover', {
-          bubbles: true,
-          relatedTarget: from
-        }));
-      }; // from outer to deep and back to outer (nested)
-
-
-      moveMouse(outer, inner);
-      moveMouse(inner, nested);
-      moveMouse(nested, deep);
-      moveMouse(deep, nested);
-      moveMouse(nested, inner);
-      moveMouse(inner, outer);
-      setTimeout(function () {
-        expect(enterSpy.calls.count()).toBe(1);
-        expect(leaveSpy.calls.count()).toBe(1);
-        expect(delegateEnterSpy.calls.count()).toBe(1);
-        expect(delegateLeaveSpy.calls.count()).toBe(1); // from outer to inner to sibling (adjacent)
-
-        moveMouse(outer, inner);
-        moveMouse(inner, sibling);
-      }, 20);
-    });
-  });
-  describe('one', function () {
-    it('should call listener just once', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var called = 0;
-      var div = fixtureEl.querySelector('div');
-      var obj = {
-        oneListener: function oneListener() {
-          called++;
-        }
-      };
-
-      _eventHandler["default"].one(div, 'bootstrap', obj.oneListener);
-
-      _eventHandler["default"].trigger(div, 'bootstrap');
-
-      _eventHandler["default"].trigger(div, 'bootstrap');
-
-      setTimeout(function () {
-        expect(called).toEqual(1);
-        done();
-      }, 20);
-    });
-    it('should call delegated listener just once', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var called = 0;
-      var div = fixtureEl.querySelector('div');
-      var obj = {
-        oneListener: function oneListener() {
-          called++;
-        }
-      };
-
-      _eventHandler["default"].one(fixtureEl, 'bootstrap', 'div', obj.oneListener);
-
-      _eventHandler["default"].trigger(div, 'bootstrap');
-
-      _eventHandler["default"].trigger(div, 'bootstrap');
-
-      setTimeout(function () {
-        expect(called).toEqual(1);
-        done();
-      }, 20);
-    });
-  });
-  describe('off', function () {
-    it('should not remove a listener', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _eventHandler["default"].off(div, null, function () {});
-
-      _eventHandler["default"].off(null, 'click', function () {});
-
-      expect().nothing();
-    });
-    it('should remove a listener', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      var called = 0;
-
-      var handler = function handler() {
-        called++;
-      };
-
-      _eventHandler["default"].on(div, 'foobar', handler);
-
-      _eventHandler["default"].trigger(div, 'foobar');
-
-      _eventHandler["default"].off(div, 'foobar', handler);
-
-      _eventHandler["default"].trigger(div, 'foobar');
-
-      setTimeout(function () {
-        expect(called).toEqual(1);
-        done();
-      }, 20);
-    });
-    it('should remove all the events', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      var called = 0;
-
-      _eventHandler["default"].on(div, 'foobar', function () {
-        called++;
-      });
-
-      _eventHandler["default"].on(div, 'foobar', function () {
-        called++;
-      });
-
-      _eventHandler["default"].trigger(div, 'foobar');
-
-      _eventHandler["default"].off(div, 'foobar');
-
-      _eventHandler["default"].trigger(div, 'foobar');
-
-      setTimeout(function () {
-        expect(called).toEqual(2);
-        done();
-      }, 20);
-    });
-    it('should remove all the namespaced listeners if namespace is passed', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      var called = 0;
-
-      _eventHandler["default"].on(div, 'foobar.namespace', function () {
-        called++;
-      });
-
-      _eventHandler["default"].on(div, 'foofoo.namespace', function () {
-        called++;
-      });
-
-      _eventHandler["default"].trigger(div, 'foobar.namespace');
-
-      _eventHandler["default"].trigger(div, 'foofoo.namespace');
-
-      _eventHandler["default"].off(div, '.namespace');
-
-      _eventHandler["default"].trigger(div, 'foobar.namespace');
-
-      _eventHandler["default"].trigger(div, 'foofoo.namespace');
-
-      setTimeout(function () {
-        expect(called).toEqual(2);
-        done();
-      }, 20);
-    });
-    it('should remove the namespaced listeners', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      var calledCallback1 = 0;
-      var calledCallback2 = 0;
-
-      _eventHandler["default"].on(div, 'foobar.namespace', function () {
-        calledCallback1++;
-      });
-
-      _eventHandler["default"].on(div, 'foofoo.namespace', function () {
-        calledCallback2++;
-      });
-
-      _eventHandler["default"].trigger(div, 'foobar.namespace');
-
-      _eventHandler["default"].off(div, 'foobar.namespace');
-
-      _eventHandler["default"].trigger(div, 'foobar.namespace');
-
-      _eventHandler["default"].trigger(div, 'foofoo.namespace');
-
-      setTimeout(function () {
-        expect(calledCallback1).toEqual(1);
-        expect(calledCallback2).toEqual(1);
-        done();
-      }, 20);
-    });
-    it('should remove the all the namespaced listeners for native events', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      var called = 0;
-
-      _eventHandler["default"].on(div, 'click.namespace', function () {
-        called++;
-      });
-
-      _eventHandler["default"].on(div, 'click.namespace2', function () {
-        called++;
-      });
-
-      _eventHandler["default"].trigger(div, 'click');
-
-      _eventHandler["default"].off(div, 'click');
-
-      _eventHandler["default"].trigger(div, 'click');
-
-      setTimeout(function () {
-        expect(called).toEqual(2);
-        done();
-      }, 20);
-    });
-    it('should remove the specified namespaced listeners for native events', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      var called1 = 0;
-      var called2 = 0;
-
-      _eventHandler["default"].on(div, 'click.namespace', function () {
-        called1++;
-      });
-
-      _eventHandler["default"].on(div, 'click.namespace2', function () {
-        called2++;
-      });
-
-      _eventHandler["default"].trigger(div, 'click');
-
-      _eventHandler["default"].off(div, 'click.namespace');
-
-      _eventHandler["default"].trigger(div, 'click');
-
-      setTimeout(function () {
-        expect(called1).toEqual(1);
-        expect(called2).toEqual(2);
-        done();
-      }, 20);
-    });
-    it('should remove a listener registered by .one', function (done) {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      var handler = function handler() {
-        throw new Error('called');
-      };
-
-      _eventHandler["default"].one(div, 'foobar', handler);
-
-      _eventHandler["default"].off(div, 'foobar', handler);
-
-      _eventHandler["default"].trigger(div, 'foobar');
-
-      setTimeout(function () {
-        expect().nothing();
-        done();
-      }, 20);
-    });
-    it('should remove the correct delegated event listener', function () {
-      var element = document.createElement('div');
-      var subelement = document.createElement('span');
-      element.append(subelement);
-      var anchor = document.createElement('a');
-      element.append(anchor);
-      var i = 0;
-
-      var handler = function handler() {
-        i++;
-      };
-
-      _eventHandler["default"].on(element, 'click', 'a', handler);
-
-      _eventHandler["default"].on(element, 'click', 'span', handler);
-
-      fixtureEl.append(element);
-
-      _eventHandler["default"].trigger(anchor, 'click');
-
-      _eventHandler["default"].trigger(subelement, 'click'); // first listeners called
-
-
-      expect(i).toEqual(2);
-
-      _eventHandler["default"].off(element, 'click', 'span', handler);
-
-      _eventHandler["default"].trigger(subelement, 'click'); // removed listener not called
-
-
-      expect(i).toEqual(2);
-
-      _eventHandler["default"].trigger(anchor, 'click'); // not removed listener called
-
-
-      expect(i).toEqual(3);
-
-      _eventHandler["default"].on(element, 'click', 'span', handler);
-
-      _eventHandler["default"].trigger(anchor, 'click');
-
-      _eventHandler["default"].trigger(subelement, 'click'); // listener re-registered
-
-
-      expect(i).toEqual(5);
-
-      _eventHandler["default"].off(element, 'click', 'span');
-
-      _eventHandler["default"].trigger(subelement, 'click'); // listener removed again
-
-
-      expect(i).toEqual(5);
-    });
-  });
-});
-"use strict";
-
-var _manipulator = _interopRequireDefault(require("../../../src/dom/manipulator"));
-
-var _fixture = require("../../helpers/fixture");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-/** Test helpers */
-describe('Manipulator', function () {
-  var fixtureEl;
-  beforeAll(function () {
-    fixtureEl = (0, _fixture.getFixture)();
-  });
-  afterEach(function () {
-    (0, _fixture.clearFixture)();
-  });
-  describe('setDataAttribute', function () {
-    it('should set data attribute prefixed with bs', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _manipulator["default"].setDataAttribute(div, 'key', 'value');
-
-      expect(div.getAttribute('data-bs-key')).toEqual('value');
-    });
-    it('should set data attribute in kebab case', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _manipulator["default"].setDataAttribute(div, 'testKey', 'value');
-
-      expect(div.getAttribute('data-bs-test-key')).toEqual('value');
-    });
-  });
-  describe('removeDataAttribute', function () {
-    it('should only remove bs-prefixed data attribute', function () {
-      fixtureEl.innerHTML = '<div data-bs-key="value" data-key-bs="postfixed" data-key="value"></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _manipulator["default"].removeDataAttribute(div, 'key');
-
-      expect(div.getAttribute('data-bs-key')).toBeNull();
-      expect(div.getAttribute('data-key-bs')).toEqual('postfixed');
-      expect(div.getAttribute('data-key')).toEqual('value');
-    });
-    it('should remove data attribute in kebab case', function () {
-      fixtureEl.innerHTML = '<div data-bs-test-key="value"></div>';
-      var div = fixtureEl.querySelector('div');
-
-      _manipulator["default"].removeDataAttribute(div, 'testKey');
-
-      expect(div.getAttribute('data-bs-test-key')).toBeNull();
-    });
-  });
-  describe('getDataAttributes', function () {
-    it('should return an empty object for null', function () {
-      expect(_manipulator["default"].getDataAttributes(null)).toEqual({});
-      expect().nothing();
-    });
-    it('should get only bs-prefixed data attributes without bs namespace', function () {
-      fixtureEl.innerHTML = '<div data-bs-toggle="tabs" data-bs-target="#element" data-another="value" data-target-bs="#element" data-in-bs-out="in-between"></div>';
-      var div = fixtureEl.querySelector('div');
-      expect(_manipulator["default"].getDataAttributes(div)).toEqual({
-        toggle: 'tabs',
-        target: '#element'
-      });
-    });
-  });
-  describe('getDataAttribute', function () {
-    it('should only get bs-prefixed data attribute', function () {
-      fixtureEl.innerHTML = '<div data-bs-key="value" data-test-bs="postFixed" data-toggle="tab"></div>';
-      var div = fixtureEl.querySelector('div');
-      expect(_manipulator["default"].getDataAttribute(div, 'key')).toEqual('value');
-      expect(_manipulator["default"].getDataAttribute(div, 'test')).toBeNull();
-      expect(_manipulator["default"].getDataAttribute(div, 'toggle')).toBeNull();
-    });
-    it('should get data attribute in kebab case', function () {
-      fixtureEl.innerHTML = '<div data-bs-test-key="value" ></div>';
-      var div = fixtureEl.querySelector('div');
-      expect(_manipulator["default"].getDataAttribute(div, 'testKey')).toEqual('value');
-    });
-    it('should normalize data', function () {
-      fixtureEl.innerHTML = '<div data-bs-test="false" ></div>';
-      var div = fixtureEl.querySelector('div');
-      expect(_manipulator["default"].getDataAttribute(div, 'test')).toEqual(false);
-      div.setAttribute('data-bs-test', 'true');
-      expect(_manipulator["default"].getDataAttribute(div, 'test')).toEqual(true);
-      div.setAttribute('data-bs-test', '1');
-      expect(_manipulator["default"].getDataAttribute(div, 'test')).toEqual(1);
-    });
-  });
-  describe('offset', function () {
-    it('should return an object with two properties top and left, both numbers', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      var offset = _manipulator["default"].offset(div);
-
-      expect(offset).toBeDefined();
-      expect(offset.top).toEqual(jasmine.any(Number));
-      expect(offset.left).toEqual(jasmine.any(Number));
-    });
-    it('should return offset relative to attached element\'s offset', function () {
-      var top = 500;
-      var left = 1000;
-      fixtureEl.innerHTML = "<div style=\"position:absolute;top:".concat(top, "px;left:").concat(left, "px\"></div>");
-      var div = fixtureEl.querySelector('div');
-
-      var offset = _manipulator["default"].offset(div);
-
-      var fixtureOffset = _manipulator["default"].offset(fixtureEl);
-
-      expect(offset).toEqual({
-        top: fixtureOffset.top + top,
-        left: fixtureOffset.left + left
-      });
-    });
-    it('should not change offset when viewport is scrolled', function (done) {
-      var top = 500;
-      var left = 1000;
-      var scrollY = 200;
-      var scrollX = 400;
-      fixtureEl.innerHTML = "<div style=\"position:absolute;top:".concat(top, "px;left:").concat(left, "px\"></div>");
-      var div = fixtureEl.querySelector('div');
-
-      var offset = _manipulator["default"].offset(div); // append an element that forces scrollbars on the window so we can scroll
-
-
-      var _fixtureEl$ownerDocum = fixtureEl.ownerDocument,
-          win = _fixtureEl$ownerDocum.defaultView,
-          body = _fixtureEl$ownerDocum.body;
-      var forceScrollBars = document.createElement('div');
-      forceScrollBars.style.cssText = 'position:absolute;top:5000px;left:5000px;width:1px;height:1px';
-      body.append(forceScrollBars);
-
-      var scrollHandler = function scrollHandler() {
-        expect(window.pageYOffset).toBe(scrollY);
-        expect(window.pageXOffset).toBe(scrollX);
-
-        var newOffset = _manipulator["default"].offset(div);
-
-        expect(newOffset).toEqual({
-          top: offset.top,
-          left: offset.left
-        });
-        win.removeEventListener('scroll', scrollHandler);
-        forceScrollBars.remove();
-        win.scrollTo(0, 0);
-        done();
-      };
-
-      win.addEventListener('scroll', scrollHandler);
-      win.scrollTo(scrollX, scrollY);
-    });
-  });
-  describe('position', function () {
-    it('should return an object with two properties top and left, both numbers', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-
-      var position = _manipulator["default"].position(div);
-
-      expect(position).toBeDefined();
-      expect(position.top).toEqual(jasmine.any(Number));
-      expect(position.left).toEqual(jasmine.any(Number));
-    });
-  });
-});
-"use strict";
-
-var _selectorEngine = _interopRequireDefault(require("../../../src/dom/selector-engine"));
-
-var _fixture = require("../../helpers/fixture");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-describe('SelectorEngine', function () {
-  var fixtureEl;
-  beforeAll(function () {
-    fixtureEl = (0, _fixture.getFixture)();
-  });
-  afterEach(function () {
-    (0, _fixture.clearFixture)();
-  });
-  describe('find', function () {
-    it('should find elements', function () {
-      fixtureEl.innerHTML = '<div></div>';
-      var div = fixtureEl.querySelector('div');
-      expect(_selectorEngine["default"].find('div', fixtureEl)).toEqual([div]);
-    });
-    it('should find elements globaly', function () {
-      fixtureEl.innerHTML = '<div id="test"></div>';
-      var div = fixtureEl.querySelector('#test');
-      expect(_selectorEngine["default"].find('#test')).toEqual([div]);
-    });
-    it('should handle :scope selectors', function () {
-      fixtureEl.innerHTML = "<ul>\n        <li></li>\n        <li>\n          <a href=\"#\" class=\"active\">link</a>\n        </li>\n        <li></li>\n      </ul>";
-      var listEl = fixtureEl.querySelector('ul');
-      var aActive = fixtureEl.querySelector('.active');
-      expect(_selectorEngine["default"].find(':scope > li > .active', listEl)).toEqual([aActive]);
-    });
-  });
-  describe('findOne', function () {
-    it('should return one element', function () {
-      fixtureEl.innerHTML = '<div id="test"></div>';
-      var div = fixtureEl.querySelector('#test');
-      expect(_selectorEngine["default"].findOne('#test')).toEqual(div);
-    });
-  });
-  describe('children', function () {
-    it('should find children', function () {
-      var _ref;
-
-      fixtureEl.innerHTML = "<ul>\n        <li></li>\n        <li></li>\n        <li></li>\n      </ul>";
-      var list = fixtureEl.querySelector('ul');
-
-      var liList = (_ref = []).concat.apply(_ref, _toConsumableArray(fixtureEl.querySelectorAll('li')));
-
-      var result = _selectorEngine["default"].children(list, 'li');
-
-      expect(result).toEqual(liList);
-    });
-  });
-  describe('parents', function () {
-    it('should return parents', function () {
-      expect(_selectorEngine["default"].parents(fixtureEl, 'body').length).toEqual(1);
-    });
-  });
-  describe('prev', function () {
-    it('should return previous element', function () {
-      fixtureEl.innerHTML = '<div class="test"></div><button class="btn"></button>';
-      var btn = fixtureEl.querySelector('.btn');
-      var divTest = fixtureEl.querySelector('.test');
-      expect(_selectorEngine["default"].prev(btn, '.test')).toEqual([divTest]);
-    });
-    it('should return previous element with an extra element between', function () {
-      fixtureEl.innerHTML = ['<div class="test"></div>', '<span></span>', '<button class="btn"></button>'].join('');
-      var btn = fixtureEl.querySelector('.btn');
-      var divTest = fixtureEl.querySelector('.test');
-      expect(_selectorEngine["default"].prev(btn, '.test')).toEqual([divTest]);
-    });
-    it('should return previous element with comments or text nodes between', function () {
-      fixtureEl.innerHTML = ['<div class="test"></div>', '<div class="test"></div>', '<!-- Comment-->', 'Text', '<button class="btn"></button>'].join('');
-      var btn = fixtureEl.querySelector('.btn');
-      var divTest = fixtureEl.querySelectorAll('.test')[1];
-      expect(_selectorEngine["default"].prev(btn, '.test')).toEqual([divTest]);
-    });
-  });
-  describe('next', function () {
-    it('should return next element', function () {
-      fixtureEl.innerHTML = '<div class="test"></div><button class="btn"></button>';
-      var btn = fixtureEl.querySelector('.btn');
-      var divTest = fixtureEl.querySelector('.test');
-      expect(_selectorEngine["default"].next(divTest, '.btn')).toEqual([btn]);
-    });
-    it('should return next element with an extra element between', function () {
-      fixtureEl.innerHTML = ['<div class="test"></div>', '<span></span>', '<button class="btn"></button>'].join('');
-      var btn = fixtureEl.querySelector('.btn');
-      var divTest = fixtureEl.querySelector('.test');
-      expect(_selectorEngine["default"].next(divTest, '.btn')).toEqual([btn]);
-    });
-    it('should return next element with comments or text nodes between', function () {
-      fixtureEl.innerHTML = ['<div class="test"></div>', '<!-- Comment-->', 'Text', '<button class="btn"></button>', '<button class="btn"></button>'].join('');
-      var btn = fixtureEl.querySelector('.btn');
-      var divTest = fixtureEl.querySelector('.test');
-      expect(_selectorEngine["default"].next(divTest, '.btn')).toEqual([btn]);
-    });
-  });
-  describe('focusableChildren', function () {
-    it('should return only elements with specific tag names', function () {
-      fixtureEl.innerHTML = ['<div>lorem</div>', '<span>lorem</span>', '<a>lorem</a>', '<button>lorem</button>', '<input />', '<textarea></textarea>', '<select></select>', '<details>lorem</details>'].join('');
-      var expectedElements = [fixtureEl.querySelector('a'), fixtureEl.querySelector('button'), fixtureEl.querySelector('input'), fixtureEl.querySelector('textarea'), fixtureEl.querySelector('select'), fixtureEl.querySelector('details')];
-      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
-    });
-    it('should return any element with non negative tab index', function () {
-      fixtureEl.innerHTML = ['<div tabindex>lorem</div>', '<div tabindex="0">lorem</div>', '<div tabindex="10">lorem</div>'].join('');
-      var expectedElements = [fixtureEl.querySelector('[tabindex]'), fixtureEl.querySelector('[tabindex="0"]'), fixtureEl.querySelector('[tabindex="10"]')];
-      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
-    });
-    it('should return not return elements with negative tab index', function () {
-      fixtureEl.innerHTML = ['<button tabindex="-1">lorem</button>'].join('');
-      var expectedElements = [];
-      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
-    });
-    it('should return contenteditable elements', function () {
-      fixtureEl.innerHTML = ['<div contenteditable="true">lorem</div>'].join('');
-      var expectedElements = [fixtureEl.querySelector('[contenteditable="true"]')];
-      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
-    });
-    it('should not return disabled elements', function () {
-      fixtureEl.innerHTML = ['<button disabled="true">lorem</button>'].join('');
-      var expectedElements = [];
-      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
-    });
-    it('should not return invisible elements', function () {
-      fixtureEl.innerHTML = ['<button style="display:none;">lorem</button>'].join('');
-      var expectedElements = [];
-      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
-    });
-  });
-});
+exports.clearBodyAndDocument = clearBodyAndDocument;
 "use strict";
 
 var _backdrop = _interopRequireDefault(require("../../../src/util/backdrop"));
@@ -25323,6 +24490,839 @@ describe('ScrollBar', function () {
         expect(currentPadding).toEqual(originalPadding, 'body padding should not be adjusted');
         scrollBar.reset();
       });
+    });
+  });
+});
+"use strict";
+
+var _data = _interopRequireDefault(require("../../../src/dom/data"));
+
+var _fixture = require("../../helpers/fixture");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+describe('Data', function () {
+  var TEST_KEY = 'bs.test';
+  var UNKNOWN_KEY = 'bs.unknown';
+  var TEST_DATA = {
+    test: 'bsData'
+  };
+  var fixtureEl;
+  var div;
+  beforeAll(function () {
+    fixtureEl = (0, _fixture.getFixture)();
+  });
+  beforeEach(function () {
+    fixtureEl.innerHTML = '<div></div>';
+    div = fixtureEl.querySelector('div');
+  });
+  afterEach(function () {
+    _data["default"].remove(div, TEST_KEY);
+
+    (0, _fixture.clearFixture)();
+  });
+  it('should return null for unknown elements', function () {
+    var data = _objectSpread({}, TEST_DATA);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    expect(_data["default"].get(null)).toBeNull();
+    expect(_data["default"].get(undefined)).toBeNull();
+    expect(_data["default"].get(document.createElement('div'), TEST_KEY)).toBeNull();
+  });
+  it('should return null for unknown keys', function () {
+    var data = _objectSpread({}, TEST_DATA);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    expect(_data["default"].get(div, null)).toBeNull();
+    expect(_data["default"].get(div, undefined)).toBeNull();
+    expect(_data["default"].get(div, UNKNOWN_KEY)).toBeNull();
+  });
+  it('should store data for an element with a given key and return it', function () {
+    var data = _objectSpread({}, TEST_DATA);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    expect(_data["default"].get(div, TEST_KEY)).toBe(data);
+  });
+  it('should overwrite data if something is already stored', function () {
+    var data = _objectSpread({}, TEST_DATA);
+
+    var copy = _objectSpread({}, data);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    _data["default"].set(div, TEST_KEY, copy);
+
+    expect(_data["default"].get(div, TEST_KEY)).not.toBe(data);
+    expect(_data["default"].get(div, TEST_KEY)).toBe(copy);
+  });
+  it('should do nothing when an element have nothing stored', function () {
+    _data["default"].remove(div, TEST_KEY);
+
+    expect().nothing();
+  });
+  it('should remove nothing for an unknown key', function () {
+    var data = _objectSpread({}, TEST_DATA);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    _data["default"].remove(div, UNKNOWN_KEY);
+
+    expect(_data["default"].get(div, TEST_KEY)).toBe(data);
+  });
+  it('should remove data for a given key', function () {
+    var data = _objectSpread({}, TEST_DATA);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    _data["default"].remove(div, TEST_KEY);
+
+    expect(_data["default"].get(div, TEST_KEY)).toBeNull();
+  });
+  it('should console.error a message if called with multiple keys', function () {
+    /* eslint-disable no-console */
+    console.error = jasmine.createSpy('console.error');
+
+    var data = _objectSpread({}, TEST_DATA);
+
+    var copy = _objectSpread({}, data);
+
+    _data["default"].set(div, TEST_KEY, data);
+
+    _data["default"].set(div, UNKNOWN_KEY, copy);
+
+    expect(console.error).toHaveBeenCalled();
+    expect(_data["default"].get(div, UNKNOWN_KEY)).toBe(null);
+  });
+});
+"use strict";
+
+var _eventHandler = _interopRequireDefault(require("../../../src/dom/event-handler"));
+
+var _fixture = require("../../helpers/fixture");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+/** Test helpers */
+describe('EventHandler', function () {
+  var fixtureEl;
+  beforeAll(function () {
+    fixtureEl = (0, _fixture.getFixture)();
+  });
+  afterEach(function () {
+    (0, _fixture.clearFixture)();
+  });
+  describe('on', function () {
+    it('should not add event listener if the event is not a string', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _eventHandler["default"].on(div, null, function () {});
+
+      _eventHandler["default"].on(null, 'click', function () {});
+
+      expect().nothing();
+    });
+    it('should add event listener', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _eventHandler["default"].on(div, 'click', function () {
+        expect().nothing();
+        done();
+      });
+
+      div.click();
+    });
+    it('should add namespaced event listener', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _eventHandler["default"].on(div, 'bs.namespace', function () {
+        expect().nothing();
+        done();
+      });
+
+      _eventHandler["default"].trigger(div, 'bs.namespace');
+    });
+    it('should add native namespaced event listener', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _eventHandler["default"].on(div, 'click.namespace', function () {
+        expect().nothing();
+        done();
+      });
+
+      _eventHandler["default"].trigger(div, 'click');
+    });
+    it('should handle event delegation', function (done) {
+      _eventHandler["default"].on(document, 'click', '.test', function () {
+        expect().nothing();
+        done();
+      });
+
+      fixtureEl.innerHTML = '<div class="test"></div>';
+      var div = fixtureEl.querySelector('div');
+      div.click();
+    });
+    it('should handle mouseenter/mouseleave like the native counterpart', function (done) {
+      fixtureEl.innerHTML = ['<div class="outer">', '<div class="inner">', '<div class="nested">', '<div class="deep"></div>', '</div>', '</div>', '<div class="sibling"></div>', '</div>'];
+      var outer = fixtureEl.querySelector('.outer');
+      var inner = fixtureEl.querySelector('.inner');
+      var nested = fixtureEl.querySelector('.nested');
+      var deep = fixtureEl.querySelector('.deep');
+      var sibling = fixtureEl.querySelector('.sibling');
+      var enterSpy = jasmine.createSpy('mouseenter');
+      var leaveSpy = jasmine.createSpy('mouseleave');
+      var delegateEnterSpy = jasmine.createSpy('mouseenter');
+      var delegateLeaveSpy = jasmine.createSpy('mouseleave');
+
+      _eventHandler["default"].on(inner, 'mouseenter', enterSpy);
+
+      _eventHandler["default"].on(inner, 'mouseleave', leaveSpy);
+
+      _eventHandler["default"].on(outer, 'mouseenter', '.inner', delegateEnterSpy);
+
+      _eventHandler["default"].on(outer, 'mouseleave', '.inner', delegateLeaveSpy);
+
+      _eventHandler["default"].on(sibling, 'mouseenter', function () {
+        expect(enterSpy.calls.count()).toBe(2);
+        expect(leaveSpy.calls.count()).toBe(2);
+        expect(delegateEnterSpy.calls.count()).toBe(2);
+        expect(delegateLeaveSpy.calls.count()).toBe(2);
+        done();
+      });
+
+      var moveMouse = function moveMouse(from, to) {
+        from.dispatchEvent(new MouseEvent('mouseout', {
+          bubbles: true,
+          relatedTarget: to
+        }));
+        to.dispatchEvent(new MouseEvent('mouseover', {
+          bubbles: true,
+          relatedTarget: from
+        }));
+      }; // from outer to deep and back to outer (nested)
+
+
+      moveMouse(outer, inner);
+      moveMouse(inner, nested);
+      moveMouse(nested, deep);
+      moveMouse(deep, nested);
+      moveMouse(nested, inner);
+      moveMouse(inner, outer);
+      setTimeout(function () {
+        expect(enterSpy.calls.count()).toBe(1);
+        expect(leaveSpy.calls.count()).toBe(1);
+        expect(delegateEnterSpy.calls.count()).toBe(1);
+        expect(delegateLeaveSpy.calls.count()).toBe(1); // from outer to inner to sibling (adjacent)
+
+        moveMouse(outer, inner);
+        moveMouse(inner, sibling);
+      }, 20);
+    });
+  });
+  describe('one', function () {
+    it('should call listener just once', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var called = 0;
+      var div = fixtureEl.querySelector('div');
+      var obj = {
+        oneListener: function oneListener() {
+          called++;
+        }
+      };
+
+      _eventHandler["default"].one(div, 'bootstrap', obj.oneListener);
+
+      _eventHandler["default"].trigger(div, 'bootstrap');
+
+      _eventHandler["default"].trigger(div, 'bootstrap');
+
+      setTimeout(function () {
+        expect(called).toEqual(1);
+        done();
+      }, 20);
+    });
+    it('should call delegated listener just once', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var called = 0;
+      var div = fixtureEl.querySelector('div');
+      var obj = {
+        oneListener: function oneListener() {
+          called++;
+        }
+      };
+
+      _eventHandler["default"].one(fixtureEl, 'bootstrap', 'div', obj.oneListener);
+
+      _eventHandler["default"].trigger(div, 'bootstrap');
+
+      _eventHandler["default"].trigger(div, 'bootstrap');
+
+      setTimeout(function () {
+        expect(called).toEqual(1);
+        done();
+      }, 20);
+    });
+  });
+  describe('off', function () {
+    it('should not remove a listener', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _eventHandler["default"].off(div, null, function () {});
+
+      _eventHandler["default"].off(null, 'click', function () {});
+
+      expect().nothing();
+    });
+    it('should remove a listener', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      var called = 0;
+
+      var handler = function handler() {
+        called++;
+      };
+
+      _eventHandler["default"].on(div, 'foobar', handler);
+
+      _eventHandler["default"].trigger(div, 'foobar');
+
+      _eventHandler["default"].off(div, 'foobar', handler);
+
+      _eventHandler["default"].trigger(div, 'foobar');
+
+      setTimeout(function () {
+        expect(called).toEqual(1);
+        done();
+      }, 20);
+    });
+    it('should remove all the events', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      var called = 0;
+
+      _eventHandler["default"].on(div, 'foobar', function () {
+        called++;
+      });
+
+      _eventHandler["default"].on(div, 'foobar', function () {
+        called++;
+      });
+
+      _eventHandler["default"].trigger(div, 'foobar');
+
+      _eventHandler["default"].off(div, 'foobar');
+
+      _eventHandler["default"].trigger(div, 'foobar');
+
+      setTimeout(function () {
+        expect(called).toEqual(2);
+        done();
+      }, 20);
+    });
+    it('should remove all the namespaced listeners if namespace is passed', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      var called = 0;
+
+      _eventHandler["default"].on(div, 'foobar.namespace', function () {
+        called++;
+      });
+
+      _eventHandler["default"].on(div, 'foofoo.namespace', function () {
+        called++;
+      });
+
+      _eventHandler["default"].trigger(div, 'foobar.namespace');
+
+      _eventHandler["default"].trigger(div, 'foofoo.namespace');
+
+      _eventHandler["default"].off(div, '.namespace');
+
+      _eventHandler["default"].trigger(div, 'foobar.namespace');
+
+      _eventHandler["default"].trigger(div, 'foofoo.namespace');
+
+      setTimeout(function () {
+        expect(called).toEqual(2);
+        done();
+      }, 20);
+    });
+    it('should remove the namespaced listeners', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      var calledCallback1 = 0;
+      var calledCallback2 = 0;
+
+      _eventHandler["default"].on(div, 'foobar.namespace', function () {
+        calledCallback1++;
+      });
+
+      _eventHandler["default"].on(div, 'foofoo.namespace', function () {
+        calledCallback2++;
+      });
+
+      _eventHandler["default"].trigger(div, 'foobar.namespace');
+
+      _eventHandler["default"].off(div, 'foobar.namespace');
+
+      _eventHandler["default"].trigger(div, 'foobar.namespace');
+
+      _eventHandler["default"].trigger(div, 'foofoo.namespace');
+
+      setTimeout(function () {
+        expect(calledCallback1).toEqual(1);
+        expect(calledCallback2).toEqual(1);
+        done();
+      }, 20);
+    });
+    it('should remove the all the namespaced listeners for native events', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      var called = 0;
+
+      _eventHandler["default"].on(div, 'click.namespace', function () {
+        called++;
+      });
+
+      _eventHandler["default"].on(div, 'click.namespace2', function () {
+        called++;
+      });
+
+      _eventHandler["default"].trigger(div, 'click');
+
+      _eventHandler["default"].off(div, 'click');
+
+      _eventHandler["default"].trigger(div, 'click');
+
+      setTimeout(function () {
+        expect(called).toEqual(2);
+        done();
+      }, 20);
+    });
+    it('should remove the specified namespaced listeners for native events', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      var called1 = 0;
+      var called2 = 0;
+
+      _eventHandler["default"].on(div, 'click.namespace', function () {
+        called1++;
+      });
+
+      _eventHandler["default"].on(div, 'click.namespace2', function () {
+        called2++;
+      });
+
+      _eventHandler["default"].trigger(div, 'click');
+
+      _eventHandler["default"].off(div, 'click.namespace');
+
+      _eventHandler["default"].trigger(div, 'click');
+
+      setTimeout(function () {
+        expect(called1).toEqual(1);
+        expect(called2).toEqual(2);
+        done();
+      }, 20);
+    });
+    it('should remove a listener registered by .one', function (done) {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      var handler = function handler() {
+        throw new Error('called');
+      };
+
+      _eventHandler["default"].one(div, 'foobar', handler);
+
+      _eventHandler["default"].off(div, 'foobar', handler);
+
+      _eventHandler["default"].trigger(div, 'foobar');
+
+      setTimeout(function () {
+        expect().nothing();
+        done();
+      }, 20);
+    });
+    it('should remove the correct delegated event listener', function () {
+      var element = document.createElement('div');
+      var subelement = document.createElement('span');
+      element.append(subelement);
+      var anchor = document.createElement('a');
+      element.append(anchor);
+      var i = 0;
+
+      var handler = function handler() {
+        i++;
+      };
+
+      _eventHandler["default"].on(element, 'click', 'a', handler);
+
+      _eventHandler["default"].on(element, 'click', 'span', handler);
+
+      fixtureEl.append(element);
+
+      _eventHandler["default"].trigger(anchor, 'click');
+
+      _eventHandler["default"].trigger(subelement, 'click'); // first listeners called
+
+
+      expect(i).toEqual(2);
+
+      _eventHandler["default"].off(element, 'click', 'span', handler);
+
+      _eventHandler["default"].trigger(subelement, 'click'); // removed listener not called
+
+
+      expect(i).toEqual(2);
+
+      _eventHandler["default"].trigger(anchor, 'click'); // not removed listener called
+
+
+      expect(i).toEqual(3);
+
+      _eventHandler["default"].on(element, 'click', 'span', handler);
+
+      _eventHandler["default"].trigger(anchor, 'click');
+
+      _eventHandler["default"].trigger(subelement, 'click'); // listener re-registered
+
+
+      expect(i).toEqual(5);
+
+      _eventHandler["default"].off(element, 'click', 'span');
+
+      _eventHandler["default"].trigger(subelement, 'click'); // listener removed again
+
+
+      expect(i).toEqual(5);
+    });
+  });
+});
+"use strict";
+
+var _manipulator = _interopRequireDefault(require("../../../src/dom/manipulator"));
+
+var _fixture = require("../../helpers/fixture");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+/** Test helpers */
+describe('Manipulator', function () {
+  var fixtureEl;
+  beforeAll(function () {
+    fixtureEl = (0, _fixture.getFixture)();
+  });
+  afterEach(function () {
+    (0, _fixture.clearFixture)();
+  });
+  describe('setDataAttribute', function () {
+    it('should set data attribute prefixed with bs', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _manipulator["default"].setDataAttribute(div, 'key', 'value');
+
+      expect(div.getAttribute('data-bs-key')).toEqual('value');
+    });
+    it('should set data attribute in kebab case', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _manipulator["default"].setDataAttribute(div, 'testKey', 'value');
+
+      expect(div.getAttribute('data-bs-test-key')).toEqual('value');
+    });
+  });
+  describe('removeDataAttribute', function () {
+    it('should only remove bs-prefixed data attribute', function () {
+      fixtureEl.innerHTML = '<div data-bs-key="value" data-key-bs="postfixed" data-key="value"></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _manipulator["default"].removeDataAttribute(div, 'key');
+
+      expect(div.getAttribute('data-bs-key')).toBeNull();
+      expect(div.getAttribute('data-key-bs')).toEqual('postfixed');
+      expect(div.getAttribute('data-key')).toEqual('value');
+    });
+    it('should remove data attribute in kebab case', function () {
+      fixtureEl.innerHTML = '<div data-bs-test-key="value"></div>';
+      var div = fixtureEl.querySelector('div');
+
+      _manipulator["default"].removeDataAttribute(div, 'testKey');
+
+      expect(div.getAttribute('data-bs-test-key')).toBeNull();
+    });
+  });
+  describe('getDataAttributes', function () {
+    it('should return an empty object for null', function () {
+      expect(_manipulator["default"].getDataAttributes(null)).toEqual({});
+      expect().nothing();
+    });
+    it('should get only bs-prefixed data attributes without bs namespace', function () {
+      fixtureEl.innerHTML = '<div data-bs-toggle="tabs" data-bs-target="#element" data-another="value" data-target-bs="#element" data-in-bs-out="in-between"></div>';
+      var div = fixtureEl.querySelector('div');
+      expect(_manipulator["default"].getDataAttributes(div)).toEqual({
+        toggle: 'tabs',
+        target: '#element'
+      });
+    });
+  });
+  describe('getDataAttribute', function () {
+    it('should only get bs-prefixed data attribute', function () {
+      fixtureEl.innerHTML = '<div data-bs-key="value" data-test-bs="postFixed" data-toggle="tab"></div>';
+      var div = fixtureEl.querySelector('div');
+      expect(_manipulator["default"].getDataAttribute(div, 'key')).toEqual('value');
+      expect(_manipulator["default"].getDataAttribute(div, 'test')).toBeNull();
+      expect(_manipulator["default"].getDataAttribute(div, 'toggle')).toBeNull();
+    });
+    it('should get data attribute in kebab case', function () {
+      fixtureEl.innerHTML = '<div data-bs-test-key="value" ></div>';
+      var div = fixtureEl.querySelector('div');
+      expect(_manipulator["default"].getDataAttribute(div, 'testKey')).toEqual('value');
+    });
+    it('should normalize data', function () {
+      fixtureEl.innerHTML = '<div data-bs-test="false" ></div>';
+      var div = fixtureEl.querySelector('div');
+      expect(_manipulator["default"].getDataAttribute(div, 'test')).toEqual(false);
+      div.setAttribute('data-bs-test', 'true');
+      expect(_manipulator["default"].getDataAttribute(div, 'test')).toEqual(true);
+      div.setAttribute('data-bs-test', '1');
+      expect(_manipulator["default"].getDataAttribute(div, 'test')).toEqual(1);
+    });
+  });
+  describe('offset', function () {
+    it('should return an object with two properties top and left, both numbers', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      var offset = _manipulator["default"].offset(div);
+
+      expect(offset).toBeDefined();
+      expect(offset.top).toEqual(jasmine.any(Number));
+      expect(offset.left).toEqual(jasmine.any(Number));
+    });
+    it('should return offset relative to attached element\'s offset', function () {
+      var top = 500;
+      var left = 1000;
+      fixtureEl.innerHTML = "<div style=\"position:absolute;top:".concat(top, "px;left:").concat(left, "px\"></div>");
+      var div = fixtureEl.querySelector('div');
+
+      var offset = _manipulator["default"].offset(div);
+
+      var fixtureOffset = _manipulator["default"].offset(fixtureEl);
+
+      expect(offset).toEqual({
+        top: fixtureOffset.top + top,
+        left: fixtureOffset.left + left
+      });
+    });
+    it('should not change offset when viewport is scrolled', function (done) {
+      var top = 500;
+      var left = 1000;
+      var scrollY = 200;
+      var scrollX = 400;
+      fixtureEl.innerHTML = "<div style=\"position:absolute;top:".concat(top, "px;left:").concat(left, "px\"></div>");
+      var div = fixtureEl.querySelector('div');
+
+      var offset = _manipulator["default"].offset(div); // append an element that forces scrollbars on the window so we can scroll
+
+
+      var _fixtureEl$ownerDocum = fixtureEl.ownerDocument,
+          win = _fixtureEl$ownerDocum.defaultView,
+          body = _fixtureEl$ownerDocum.body;
+      var forceScrollBars = document.createElement('div');
+      forceScrollBars.style.cssText = 'position:absolute;top:5000px;left:5000px;width:1px;height:1px';
+      body.append(forceScrollBars);
+
+      var scrollHandler = function scrollHandler() {
+        expect(window.pageYOffset).toBe(scrollY);
+        expect(window.pageXOffset).toBe(scrollX);
+
+        var newOffset = _manipulator["default"].offset(div);
+
+        expect(newOffset).toEqual({
+          top: offset.top,
+          left: offset.left
+        });
+        win.removeEventListener('scroll', scrollHandler);
+        forceScrollBars.remove();
+        win.scrollTo(0, 0);
+        done();
+      };
+
+      win.addEventListener('scroll', scrollHandler);
+      win.scrollTo(scrollX, scrollY);
+    });
+  });
+  describe('position', function () {
+    it('should return an object with two properties top and left, both numbers', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+
+      var position = _manipulator["default"].position(div);
+
+      expect(position).toBeDefined();
+      expect(position.top).toEqual(jasmine.any(Number));
+      expect(position.left).toEqual(jasmine.any(Number));
+    });
+  });
+});
+"use strict";
+
+var _selectorEngine = _interopRequireDefault(require("../../../src/dom/selector-engine"));
+
+var _fixture = require("../../helpers/fixture");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+describe('SelectorEngine', function () {
+  var fixtureEl;
+  beforeAll(function () {
+    fixtureEl = (0, _fixture.getFixture)();
+  });
+  afterEach(function () {
+    (0, _fixture.clearFixture)();
+  });
+  describe('find', function () {
+    it('should find elements', function () {
+      fixtureEl.innerHTML = '<div></div>';
+      var div = fixtureEl.querySelector('div');
+      expect(_selectorEngine["default"].find('div', fixtureEl)).toEqual([div]);
+    });
+    it('should find elements globaly', function () {
+      fixtureEl.innerHTML = '<div id="test"></div>';
+      var div = fixtureEl.querySelector('#test');
+      expect(_selectorEngine["default"].find('#test')).toEqual([div]);
+    });
+    it('should handle :scope selectors', function () {
+      fixtureEl.innerHTML = "<ul>\n        <li></li>\n        <li>\n          <a href=\"#\" class=\"active\">link</a>\n        </li>\n        <li></li>\n      </ul>";
+      var listEl = fixtureEl.querySelector('ul');
+      var aActive = fixtureEl.querySelector('.active');
+      expect(_selectorEngine["default"].find(':scope > li > .active', listEl)).toEqual([aActive]);
+    });
+  });
+  describe('findOne', function () {
+    it('should return one element', function () {
+      fixtureEl.innerHTML = '<div id="test"></div>';
+      var div = fixtureEl.querySelector('#test');
+      expect(_selectorEngine["default"].findOne('#test')).toEqual(div);
+    });
+  });
+  describe('children', function () {
+    it('should find children', function () {
+      var _ref;
+
+      fixtureEl.innerHTML = "<ul>\n        <li></li>\n        <li></li>\n        <li></li>\n      </ul>";
+      var list = fixtureEl.querySelector('ul');
+
+      var liList = (_ref = []).concat.apply(_ref, _toConsumableArray(fixtureEl.querySelectorAll('li')));
+
+      var result = _selectorEngine["default"].children(list, 'li');
+
+      expect(result).toEqual(liList);
+    });
+  });
+  describe('parents', function () {
+    it('should return parents', function () {
+      expect(_selectorEngine["default"].parents(fixtureEl, 'body').length).toEqual(1);
+    });
+  });
+  describe('prev', function () {
+    it('should return previous element', function () {
+      fixtureEl.innerHTML = '<div class="test"></div><button class="btn"></button>';
+      var btn = fixtureEl.querySelector('.btn');
+      var divTest = fixtureEl.querySelector('.test');
+      expect(_selectorEngine["default"].prev(btn, '.test')).toEqual([divTest]);
+    });
+    it('should return previous element with an extra element between', function () {
+      fixtureEl.innerHTML = ['<div class="test"></div>', '<span></span>', '<button class="btn"></button>'].join('');
+      var btn = fixtureEl.querySelector('.btn');
+      var divTest = fixtureEl.querySelector('.test');
+      expect(_selectorEngine["default"].prev(btn, '.test')).toEqual([divTest]);
+    });
+    it('should return previous element with comments or text nodes between', function () {
+      fixtureEl.innerHTML = ['<div class="test"></div>', '<div class="test"></div>', '<!-- Comment-->', 'Text', '<button class="btn"></button>'].join('');
+      var btn = fixtureEl.querySelector('.btn');
+      var divTest = fixtureEl.querySelectorAll('.test')[1];
+      expect(_selectorEngine["default"].prev(btn, '.test')).toEqual([divTest]);
+    });
+  });
+  describe('next', function () {
+    it('should return next element', function () {
+      fixtureEl.innerHTML = '<div class="test"></div><button class="btn"></button>';
+      var btn = fixtureEl.querySelector('.btn');
+      var divTest = fixtureEl.querySelector('.test');
+      expect(_selectorEngine["default"].next(divTest, '.btn')).toEqual([btn]);
+    });
+    it('should return next element with an extra element between', function () {
+      fixtureEl.innerHTML = ['<div class="test"></div>', '<span></span>', '<button class="btn"></button>'].join('');
+      var btn = fixtureEl.querySelector('.btn');
+      var divTest = fixtureEl.querySelector('.test');
+      expect(_selectorEngine["default"].next(divTest, '.btn')).toEqual([btn]);
+    });
+    it('should return next element with comments or text nodes between', function () {
+      fixtureEl.innerHTML = ['<div class="test"></div>', '<!-- Comment-->', 'Text', '<button class="btn"></button>', '<button class="btn"></button>'].join('');
+      var btn = fixtureEl.querySelector('.btn');
+      var divTest = fixtureEl.querySelector('.test');
+      expect(_selectorEngine["default"].next(divTest, '.btn')).toEqual([btn]);
+    });
+  });
+  describe('focusableChildren', function () {
+    it('should return only elements with specific tag names', function () {
+      fixtureEl.innerHTML = ['<div>lorem</div>', '<span>lorem</span>', '<a>lorem</a>', '<button>lorem</button>', '<input />', '<textarea></textarea>', '<select></select>', '<details>lorem</details>'].join('');
+      var expectedElements = [fixtureEl.querySelector('a'), fixtureEl.querySelector('button'), fixtureEl.querySelector('input'), fixtureEl.querySelector('textarea'), fixtureEl.querySelector('select'), fixtureEl.querySelector('details')];
+      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
+    });
+    it('should return any element with non negative tab index', function () {
+      fixtureEl.innerHTML = ['<div tabindex>lorem</div>', '<div tabindex="0">lorem</div>', '<div tabindex="10">lorem</div>'].join('');
+      var expectedElements = [fixtureEl.querySelector('[tabindex]'), fixtureEl.querySelector('[tabindex="0"]'), fixtureEl.querySelector('[tabindex="10"]')];
+      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
+    });
+    it('should return not return elements with negative tab index', function () {
+      fixtureEl.innerHTML = ['<button tabindex="-1">lorem</button>'].join('');
+      var expectedElements = [];
+      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
+    });
+    it('should return contenteditable elements', function () {
+      fixtureEl.innerHTML = ['<div contenteditable="true">lorem</div>'].join('');
+      var expectedElements = [fixtureEl.querySelector('[contenteditable="true"]')];
+      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
+    });
+    it('should not return disabled elements', function () {
+      fixtureEl.innerHTML = ['<button disabled="true">lorem</button>'].join('');
+      var expectedElements = [];
+      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
+    });
+    it('should not return invisible elements', function () {
+      fixtureEl.innerHTML = ['<button style="display:none;">lorem</button>'].join('');
+      var expectedElements = [];
+      expect(_selectorEngine["default"].focusableChildren(fixtureEl)).toEqual(expectedElements);
     });
   });
 });
