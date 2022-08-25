@@ -1,0 +1,22 @@
+.assignmentNav {
+    .list-group-item.active{
+        background: $light;
+        color: $dark;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+    }
+}
+.reply{
+    transition: 0.5s;
+    .ck-editor__editable {
+        min-height: 100%;
+        z-index: 999;
+        border: 0;
+        border: 0 !important;
+    }
+    
+    .ck-content{min-height: 250px;}
+    .ck.ck-editor__top .ck-sticky-panel .ck-toolbar{
+        border: 0 !important;
+        border-bottom: 1px solid $gray-400 !important;
+    }
+}
