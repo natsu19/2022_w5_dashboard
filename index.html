@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+  <link rel="bookmark" href="assets/images/favicon.ico" />
+  <title>Assignment｜w5 dashboard</title>
+  <link rel="stylesheet" href="./assets/style/all.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script> 
+</head>
+
+<body>
+  <div class="d-flex vh-100">
+    <header class="w-300px bg-light p-8">
+      <div class="h-100 d-flex flex-column justify-content-between">
+        <h1 class="logo"><a href="index.html" title="回首頁"></a></h1>
+        <nav aria-current="navigation sidebar " class="flex-grow-1 mt-8">
+          <ul class="navMain d-flex flex-column fw-bold gap-6 list-unstyled ">
+            <li id="navDashboard">
+              <a href="dashboard.html" title="Dashboard">
+                <span class="material-icons">insert_chart</span>
+                Dashboard
+              </a>
+            </li>
+            <li id="navQuestion">
+              <a href="question.html" title="Question">
+                <span class="material-icons">question_answer</span>
+                Question
+              </a>
+            </li>
+            <li id="navAssignment">
+              <a href="index.html" title="Assignment">
+                <span class="material-icons">assignment</span>
+                Assignment
+              </a>
+              </li>
+            <li id="navCourse">
+              <a href="course.html" title="Course">
+                <span class="material-icons">video_library</span>
+                Course
+              </a>
+            </li>
+            <li id="navAdmin">
+              <a href="admin.html" title="Admin">
+                <span class="material-icons">group</span>
+                Admin
+              </a>
+            </li>
+            <li id="navSettings">
+              <a href="settings.html" title="Settings">
+                <span class="material-icons">settings</span>
+                Settings
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <a href="#" class="d-flex user" title="user">
+          <div class="w-40px h-40px rounded-circle overflow-hidden me-4">
+            <img src="./assets/images/andychen.jpeg" alt="Andy Chen" class="img-fluid">
+          </div>
+          <div>
+            <p class="text-dark fw-bold mb-0">Andy Chen</p>
+            <small class="text-secondary mb-0">andy0401@mail.com</small>
+          </div>
+        </a>
+      </div>
+      
+    </header>
+
+    <main class="px-8 wrap">
+    
+<header class="d-flex align-items-center justify-content-between py-8">
+    <div class="d-flex gap-12">
+        <h2 class="fs-4 fw-bold">Assignment</h2>
+        <div class="dropdown">
+            <button type="button" href="#" class="btn btn-sm fw-bold me-2" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                All Courses
+                <span class="material-icons text-primary">expand_more</span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="#">ba</a></li>
+                <li><a class="dropdown-item" href="#">la</a></li>
+                <li><a class="dropdown-item" href="#">Ba</a></li>
+                <li><a class="dropdown-item" href="#">BA</a></li>
+                <li><a class="dropdown-item" href="#">bA</a></li>
+            </ul>
+        </div>
+    </div>
+    <ul class="d-flex gap-6 list-unstyled mb-0">
+        <li>
+            <button type="button" href="#" class="btn btn-link p-0" title="search">
+                <span class="material-icons">
+                    search
+                </span>
+            </button>
+        </li>
+        <li>
+            <button type="button" href="#" class="btn btn-link p-0" title="messages">
+                <span class="material-icons">
+                    notifications_active
+                </span>
+            </button>
+        </li>
+    </ul>
+</header>
+
+<section class="d-flex flex-row gap-4">
+    <!-- L -->
+    <div class="col-4 ">
+        <div class="dropdown">
+            <button type="button" class="btn btn-sm fw-bold me-2" data-bs-toggle="dropdown" aria-expanded="false">
+                All (4)
+                <span class="material-icons text-primary">expand_more</span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="#">All(4)</a></li>
+                <li><a class="dropdown-item" href="#">Hello</a></li>
+                <li><a class="dropdown-item" href="#">World</a></li>
+            </ul>
+        </div>
+
+        <nav aria-current="Assignment navigation" class="assignmentNav list-group">
+            <button class="list-group-item list-group-item-action p-3" id="v-pills-01-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-01" type="button" role="tab" aria-controls="v-pills-01" aria-selected="true">
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                    <span>Chapter Assignment 2</span>
+                    <span>4 hrs ago</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Please check this file…</span>
+                    <span class="fs-8 text-secondary ">Emily Wang</span>
+                </div>
+            </button>
+
+            <button class="list-group-item list-group-item-action p-3" id="v-pills-02-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-02" type="button" role="tab" aria-controls="v-pills-02" aria-selected="false">
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                    <span>Chapter Assignment 1</span>
+                    <span>12 hrs ago</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">My Homework</span>
+                    <span class="fs-8 text-secondary ">David Xu</span>
+                </div>
+            </button>
+
+            <button class="list-group-item list-group-item-action p-3" id="v-pills-03-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-03" type="button" role="tab" aria-controls="v-pills-03" aria-selected="false">
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                    <span>Final Assignment</span>
+                    <span>18 hrs ago</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Have a problem with this…</span>
+                    <span class="fs-8 text-secondary ">Tony Wei</span>
+                </div>
+            </button>
+
+            <button class="list-group-item list-group-item-action p-3" id="v-pills-04-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-04" type="button" role="tab" aria-controls="v-pills-04" aria-selected="false">
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                    <span>Final Assignment</span>
+                    <span>19 hrs ago</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Did I do it right?</span>
+                    <span class="fs-8 text-secondary ">Christina Lin</span>
+                </div>
+            </button>
+        </nav>
+    </div>
+    <!-- R -->
+    <section class="col-8">
+        <div class="text-end fs-8 text-secondary lh-lg mb-2">2 comments</div>
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-01" role="tabpanel" aria-labelledby="v-pills-01-tab">
+                <div class="card">
+                    <!-- title -->
+                    <div class="card-header d-flex justify-content-between py-3 px-4">
+                        <div>
+                            <p class="fs-8 mb-1">Chapter Assignment 2 / HTML&CSS</p>
+                            <h3 class="fs-6 fw-bold ">Please check this file for me, thanks!</h3>
+                        </div>
+                        <button type="button" href="#" class="btn p-2 btn-link" title="more function">
+                            <span class="material-icons">more_vert</span>
+                        </button>
+                    </div>
+
+                    <!-- Q -->
+                    <div class="card-body pt-4 ps-4 pe-8 ">
+                        <div class="d-flex gap-2 mb-4">
+                            <div class="w-40px h-40px rounded-circle overflow-hidden">
+                                <img src="./assets/images/emilywang.jpeg" alt="Emily Wang" class="img-fluid">
+                            </div>
+                            <div class="lh-1">
+                                <p class="mb-2 fw-bold">Emily Wang</p>
+                                <small class="text-secondary">10:38 AM (4 hours ago)</small>
+                            </div>
+                        </div>
+                        <div class="border-bottom border-1 border-light-gray ms-12 pb-4">
+                            <p class="card-text fs-7">
+                                Hi Teacher, the attached file is my homework of chapter 2. And here comes a question:
+                                Why in the following code the height of the <code>div</code> is bigger than the height
+                                of the <code>img</code> ? There is a gap below the image, but it doesn’t seems to be a
+                                padding/margin. <br>What is the gap or extra space below image?
+                            </p>
+                            <a href="./assets/files/HW-2-David.zip" title="download HW-2-David.zip"
+                                class="btn btn-light border border-1 border-light-gray px-4">
+                                <span class="material-icons text-primary me-2">attach_file</span>
+                                <span class="fs-6 fw-bold">HW-2-David.zip</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- A -->
+                    <div class="card-body position-relative p-0">
+                        
+
+                        <!-- Reply 編輯器  -->
+                        <div class="reply position-absolute collapse w-100 h-100 fade" id="Reply">
+                            <div class="card">
+                                <div id="editor">Reply an answer…</div>
+                                <div class="card-footer border-top-0 bg-white text-end">
+                                    <button type="button" href="#Reply" data-bs-toggle="collapse" role="button"
+                                        aria-expanded="false" aria-controls="Reply"
+                                        class="btn btn-outline-primary fw-bold px-8 me-2 mb-4">Cancel</button>
+                                    <button type="button" href="#"
+                                        class="btn btn-primary fw-bold px-8 me-6 mb-4">Reply</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- 回覆內容 -->
+                        <div class="pt-4 ps-4 pe-8 pb-5 ">
+                            <div class="d-flex mb-4 justify-content-between">
+                                <div class="col-10 d-flex">
+                                    <div class="w-40px h-40px rounded-circle overflow-hidden me-2">
+                                        <img src="assets/images/andychen.jpeg" alt="Andy Chen" class="img-fluid">
+                                    </div>
+                                    <div class="lh-1">
+                                        <p class="mb-2 fw-bold">Andy Chen (You)</p>
+                                        <small class="text-secondary">13:24 AM (1 hours ago)</small>
+                                    </div>
+                                </div>
+                                <div class="col-2 text-end">
+                                    <button type="button" href="#" class="btn d-inline-block p-2 btn-link"
+                                        title="favorite">
+                                        <span class="material-icons">star_border</span>
+                                    </button>
+                                    <button type="button" href="#" class="btn d-inline-block p-2 btn-link" title="Edit">
+                                        <span class="material-icons">edit</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class=" fs-7 ms-12 pb-5">
+                                <p class="card-text">
+                                    Hi David, by default, an image is rendered inline, like a letter so it sits on the
+                                    same line that a, b, c and d sit on. There is space below that line for the
+                                    descenders you find on letters like g, j, p and q.
+                                </p>
+                                <p>You can:</p>
+                                <ul>
+                                    <li>adjust the <code>vertical-align</code> of the image to position it elsewhere
+                                        (e.g. the <code>middle</code> ) or</li>
+                                    <li>change the <code>display</code> so it isn’t inline.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-02" role="tabpanel" aria-labelledby="v-pills-02-tab">
+                ...
+            </div>
+            <div class="tab-pane fade" id="v-pills-03" role="tabpanel" aria-labelledby="v-pills-03-tab">
+                ...
+            </div>
+            <div class="tab-pane fade" id="v-pills-04" role="tabpanel" aria-labelledby="v-pills-04-tab">
+                ...
+            </div>
+        </div>
+    </section>
+</section>
+
+<div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-between mt-4  col-8">
+        <div>
+            <a href="#" class="me-6">
+                <span class="material-icons">
+                    navigate_before
+                </span>
+            </a>
+            <a href="#">
+                <span class="material-icons">
+                    navigate_next
+                </span>
+            </a>
+        </div>
+        <div>
+            <button type="button" class="btn btn-outline-primary fw-bold px-8 me-4">Mark as read</button>
+            <button type="button" href="#Reply" class="btn btn-primary fw-bold px-8" data-bs-toggle="collapse"
+                role="button" aria-expanded="false" aria-controls="Reply">Reply</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    //增加一個active的class
+    navAssignment.classList.toggle("active");
+
+    //編輯器
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+</script>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+  <script src="./assets/js/vendors.js"></script>
+  <script src="./assets/js/all.js"></script>
+
+
+  <script>
+    let navDashboard = document.querySelector("#navDashboard")
+    let navQuestion = document.querySelector("#navQuestion")
+    let navAssignment = document.querySelector("#navAssignment")
+    let navCourse = document.querySelector("#navCourse")
+    let navAdmin = document.querySelector("#navAdmin")
+    let navSettings = document.querySelector("#navSettings")
+      //增加一個active的class
+      //navSettings.classList.toggle("active");
+  </script>
+</body>
+
+</html>
